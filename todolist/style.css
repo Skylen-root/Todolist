@@ -1,0 +1,51 @@
+* {
+    box-sizing: border-box;
+}
+
+
+.wrapper {
+    width: 970px;
+    //text-align: center;
+}
+
+.row {
+    width: 970px;
+}
+
+#out, #out2{
+    position: relative; 
+    display: block;
+    float: left;
+    width: 50%;
+    text-align: center;
+    text-align: top;
+    min-height: 1px;
+}
+
+#out:after, #out2:after .row:after .row:before {
+    display: table;
+    content: " ";
+    //height: 0;
+    clear: both;
+}
+
+#out:before, #out2:before {
+    content: " ";
+    height: 0;
+    clear: both;
+}
+
+.list-item, .list-item2 {
+    transition: all 0.5s ease-in-out;
+    opacity: 0.8;
+    height: 50px;
+    background-color: green;
+    color: #fff;
+    margin: 5px;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 20px;
+}
+
+.list-item:hover {
+    opacity: 1;
+}

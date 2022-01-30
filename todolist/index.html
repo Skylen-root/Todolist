@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="script.js" defer></script> -->
+
+</head>
+<body>
+    <div class="wrapper">
+        <!-- <div class="control-panel">
+            <input class="addItem" type="text"><input type="button" id="add" value="add">
+
+        </div> -->
+
+
+
+
+        <!-- <div class="todolist">
+            <form name="userForm">
+                <input type="hidden" name="id" value="0" />
+                <div class="form-group">
+                    <label for="name">Имя:</label>
+                    <input class="form-control" name="name" />
+                </div>
+                <div class="form-group">
+                    <label for="age">Возраст:</label>
+                    <input class="form-control" name="age" />
+                </div>
+                <div class="panel-body">
+                    <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                    <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
+                </div>
+            </form> -->
+
+
+            <form name="todolist">
+                <label for="title">Title</label>
+                <input name="title">
+                <label for="content">Content</label>
+                <input name="content">
+                <button type="submit">Create</button>
+            </form>
+        </div>
+
+        <div class="row">
+            <div id="out">
+            
+    
+                
+    
+            </div>
+            <div id="out2">
+                
+                
+    
+            </div>
+        </div>
+
+        
+    </div>
+    
+    <script>
+
+        async function CreateUser(title, content) {
+
+            const response = await fetch("http://localhost:3000/api/newtask", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: title,
+                    content: content
+                })
+            });
+            // if (response.ok === true) {
+            //     const user = await response.json();
+            //     reset();
+            //     document.querySelector("tbody").append(row(user));
+            // }
+        }
+
+
+
+
+
+
+
+        document.forms["todolist"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["todolist"];
+            const title = form.elements["title"].value;
+            const content = form.elements["content"].value;
+            CreateUser(title,content);
+        });
+
+
+
+</script>
+</body>
+</html>
