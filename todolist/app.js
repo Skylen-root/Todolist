@@ -67,8 +67,8 @@ app.post("/api/newtask", jsonParser, (req, res) => {
     //res.send(req.params.title +" + "+ req.params.content);
     //res.send(req.body.title);
     let title = req.body.title;
-    res.send(req.body.title);
-    console.log(req.body.title);
+    res.send(req.body);
+    console.log(req.body);
 
 })
 
