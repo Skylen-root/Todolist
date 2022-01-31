@@ -75,6 +75,10 @@
                     content: content
                 })
             });
+            if (response.ok === true) {
+                result = response.json();
+                console.log(result);
+            }
             // if (response.ok === true) {
             //     const user = await response.json();
             //     reset();
