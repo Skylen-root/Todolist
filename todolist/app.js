@@ -31,6 +31,8 @@ let sql;
 
 app.use(express.static(__dirname + "/public"));
 
+
+// GET ALL tasks
 app.get("/api/tasks", (req, res) => {
     sql = "Select * from Tasks";
     db.serialize(
@@ -40,16 +42,18 @@ app.get("/api/tasks", (req, res) => {
                     console.log(err.message);
                 }
                 else{
-                   res.send(rows);
+                    res.send(rows);
                 }
             });
         }
     );
 
-})
+});
 
+
+// GET SOME TASK
 app.get("/api/task/:id", (req, res) => {
-    sql = `SELECT * FROM Tasks WHERE taks_id = ${req.params.id}`;
+    sql = `SELECT * FROM Tasks WHERE id = ${req.params.id}`;
 
     db.get(sql, (err, rows) => {
         if(err) {
@@ -62,20 +66,44 @@ app.get("/api/task/:id", (req, res) => {
     
 })
 
-app.post("/api/newtask", jsonParser, (req, res) => {
-    //sql = `INSERT INTO "Tasks" ("title", "content") VALUES ("${title}","${content}");`
-    //res.send(req.params.title +" + "+ req.params.content);
-    //res.send(req.body.title);
-    let title = req.body.title;
-    res.send(req.body);
-    console.log(req.body);
 
-})
+// add new task
+app.post("/api/newtask", jsonParser, (req, res) => {
+    let title = req.body.title;
+    let content = req.body.content;
+    let summary = 1;
+
+    sql = `INSERT INTO "Tasks" ("title", "content") VALUES ("${title}","${content}");`;
+    //sql = "select * from Tasks;";
+
+    
+
+    db.run(sql, function(err) {
+        if (err) {
+            return console.error(err.message);
+        }
+        else {
+            
+            summary = this.lastID;
+            res.send(JSON.stringify(this));
+            console.log(summary);
+            result(summary);
+        }
+    });
+
+    function result(summary){
+        console.log(summary);
+    }
+    
+    
+
+});
+
 
 
 
 
 
 app.listen(port, () => {
-    console.log("Todolist is running...")
-})
+    console.log("Todolist is running...");
+});
