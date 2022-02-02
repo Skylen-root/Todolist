@@ -76,8 +76,6 @@ app.post("/api/newtask", jsonParser, (req, res) => {
     sql = `INSERT INTO "Tasks" ("title", "content") VALUES ("${title}","${content}");`;
     //sql = "select * from Tasks;";
 
-    
-
     db.run(sql, function(err) {
         if (err) {
             return console.error(err.message);
@@ -86,6 +84,7 @@ app.post("/api/newtask", jsonParser, (req, res) => {
             
             summary = this.lastID;
             res.send(JSON.stringify(this));
+            //res.json(this)
             console.log(summary);
             result(summary);
         }
@@ -95,12 +94,32 @@ app.post("/api/newtask", jsonParser, (req, res) => {
         console.log(summary);
     }
     
-    
+});
+
+// Delete tasks
+app.delete("/api/task",jsonParser, function (req, res){
+    let id = req.body.id;
+    sql = `DELETE FROM tasks WHERE id = ${id}`;
+    db.run(sql, function (err){
+        if(err){
+            return console.error(err.message);
+        }
+        else{
+            console.log(this);
+            res.send(JSON.stringify(this.changes));
+        }
+    })
 
 });
 
 
-
+// app.delete("/api/task/:id",jsonParser, function (req, res){
+//     let id = req.params.id;
+//     sql = `DELETE * WHERE id = ${id}`;
+//     db.run(sql,function (err){
+//         res.send(this);
+//     })
+// });
 
 
 

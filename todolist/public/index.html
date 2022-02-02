@@ -43,7 +43,21 @@
                 <label for="content">Content</label>
                 <input name="content">
                 <button type="submit">Create</button>
+                <div>
+                    <label for="deleteTask">Delete User by id</label>
+                    <input name="deleteTask">
+                    <button id="deletetask" type="button">Delete</button><span id = "sp"></span>
+                </div>
             </form>
+
+
+            <button type="button" id="get-tasks-list">Get Tasks List</button>
+            <div id="tasks-list">
+
+            </div>
+
+            
+
         </div>
 
         <div class="row">
@@ -64,6 +78,11 @@
     </div>
     
     <script>
+
+        let taskList;
+
+
+
 
         async function CreateUser(title, content) {
 
@@ -86,10 +105,52 @@
             // }
         }
 
+        async function DeleteUser(id) {
+
+            const response = await fetch("http://localhost:3000/api/task", {
+                method: "DELETE",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: id
+                })
+            });
+            if(response.ok === true) {
+                result = await response.json();
+                if(result === 0){
+                    document.querySelector("#sp").innerHTML = "User not found";
+                }
+                else {
+                    document.querySelector("#sp").innerHTML = "Done"
+                }
+            }
+
+        }
+
+
+        async function GetTaskList(){
+            const response = await fetch("http://localhost:3000/api/tasks", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            })
+            if(response.ok === true) {
+                result = await response.json();
+                //result = JSON.stringify(result);
+                //result = JSON.parse(result);
+                //console.log(typeof result)
+                //console.log(result)
+                //result = JSON.parse(result);
+                //return JSON.stringify(result);
+                return result;
+                //document.querySelector("#tasks-list").innerHTML = JSON.stringify(result);
+            }
+            else {
+                return "Something wrong";
+            }
 
 
 
 
+        }
 
 
         document.forms["todolist"].addEventListener("submit", e => {
@@ -101,7 +162,55 @@
         });
 
 
+        document.querySelector("#deletetask").addEventListener("click", e => {
+            const form = document.forms["todolist"];
+            const id = form.elements["deleteTask"].value;
+            DeleteUser(id);
+        })
+
+
+
+        document.querySelector("#get-tasks-list").addEventListener("click", e => {
+            taskList =  GetTaskList();
+            //taskList = taskList.json();
+            let a;
+            taskList.then(
+                function(result){
+                    a = result;
+                    a = JSON.stringify(a);
+                    //document.querySelector("#tasks-list").innerHTML = a;
+                    //console.log(result[55])
+                    ShowList(result);
+                },
+                function(error){console.log(error);}
+            )
+            //console.log(taskList);
+            //taskList.then()
+            
+        })
+
+        
+
+        function ShowList(list) {
+
+            let out;
+            for(let i in list) {
+                out = `<div>
+    <h4>${list[i].title}</h4>
+    <p>${list[i].content}</p>
+</div>`
+            }
+
+
+
+
+            document.querySelector("#tasks-list").innerHTML = out;
+        }
+
+
+
 
 </script>
+
 </body>
 </html>
