@@ -84,7 +84,7 @@
 
 
 
-        async function CreateUser(title, content) {
+        async function CreateTask(title, content) {
 
             const response = await fetch("http://localhost:3000/api/newtask", {
                 method: "POST",
@@ -103,9 +103,10 @@
             //     reset();
             //     document.querySelector("tbody").append(row(user));
             // }
+            GetTaskList();
         }
 
-        async function DeleteUser(id) {
+        async function DeleteTask(id) {
 
             const response = await fetch("http://localhost:3000/api/task", {
                 method: "DELETE",
@@ -123,7 +124,8 @@
                     document.querySelector("#sp").innerHTML = "Done"
                 }
             }
-
+            
+            GetTaskList();
         }
 
 
@@ -134,12 +136,8 @@
             })
             if(response.ok === true) {
                 result = await response.json();
-                //result = JSON.stringify(result);
-                //result = JSON.parse(result);
-                //console.log(typeof result)
-                //console.log(result)
-                //result = JSON.parse(result);
-                //return JSON.stringify(result);
+                
+                ShowList(result);
                 return result;
                 //document.querySelector("#tasks-list").innerHTML = JSON.stringify(result);
             }
@@ -158,53 +156,71 @@
             const form = document.forms["todolist"];
             const title = form.elements["title"].value;
             const content = form.elements["content"].value;
-            CreateUser(title,content);
+            CreateTask(title,content);
         });
 
 
         document.querySelector("#deletetask").addEventListener("click", e => {
             const form = document.forms["todolist"];
             const id = form.elements["deleteTask"].value;
-            DeleteUser(id);
+            DeleteTask(id);
         })
 
 
 
         document.querySelector("#get-tasks-list").addEventListener("click", e => {
             taskList =  GetTaskList();
-            //taskList = taskList.json();
             let a;
             taskList.then(
                 function(result){
-                    a = result;
-                    a = JSON.stringify(a);
+                    a = JSON.stringify(result);
                     //document.querySelector("#tasks-list").innerHTML = a;
                     //console.log(result[55])
                     ShowList(result);
+                    //document.querySelector("#tasks-list").innerHTML = JSON.stringify(result[3].id);
                 },
+
                 function(error){console.log(error);}
             )
-            //console.log(taskList);
+            console.log(JSON.stringify(taskList));
             //taskList.then()
             
         })
 
+
+
+        // document.querySelectorAll(".button-delete-task").addEventListener("click", e => {
+        //     console.log(this);
+        // })
+
+        function DeleteTaskButton() {
+            let buttonsDeleteTask = document.querySelectorAll(".button-delete-task");
+
+            buttonsDeleteTask.forEach(function (elem) {
+                elem.addEventListener("click", function(e){
+                    console.log(this.id);
+                    DeleteTask(this.id.slice(5))
+                });
+            })
+        }
         
 
         function ShowList(list) {
 
             let out;
-            for(let i in list) {
-                out = `<div>
-    <h4>${list[i].title}</h4>
-    <p>${list[i].content}</p>
+//             for(let i in list) {
+//                 out += `<div>
+//     <p>№ ${list[i].id}. Title: ${list[i].title}. Content: ${list[i].content}</p>
+// </div>`
+//             }
+
+            for (let i = list.length - 1; i >= 0; i--) {
+                out += `<div class="button-delete-task" id="task-${list[i].id}">№ ${list[i].id}. Title: ${list[i].title}. Content: ${list[i].content} <button>Delete task</button>
 </div>`
             }
 
-
-
-
             document.querySelector("#tasks-list").innerHTML = out;
+            DeleteTaskButton();
         }
 
 
