@@ -198,8 +198,8 @@
 
             buttonsDeleteTask.forEach(function (elem) {
                 elem.addEventListener("click", function(e){
-                    console.log(this.id);
-                    DeleteTask(this.id.slice(5))
+                    console.log(this.parentElement.id);
+                    DeleteTask(this.parentNode.id.slice(5))
                 });
             })
         }
@@ -215,7 +215,7 @@
 //             }
 
             for (let i = list.length - 1; i >= 0; i--) {
-                out += `<div class="button-delete-task" id="task-${list[i].id}">№ ${list[i].id}. Title: ${list[i].title}. Content: ${list[i].content} <button>Delete task</button>
+                out += `<div  id="task-${list[i].id}">№ ${list[i].id}. Title: ${list[i].title}. Content: ${list[i].content} <button class="button-delete-task">Delete task</button>
 </div>`
             }
 
@@ -225,7 +225,7 @@
 
 
 
-
+        GetTaskList();
 </script>
 
 </body>

@@ -124,5 +124,5 @@ app.delete("/api/task",jsonParser, function (req, res){
 
 
 app.listen(port, () => {
-    console.log("Todolist is running...");
+    console.log("http://localhost:"+port);
 });
