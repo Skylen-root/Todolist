@@ -17,7 +17,7 @@
     display: block;
     float: left;
     width: 50%;
-    text-align: center;
+    //text-align: center;
     text-align: top;
     min-height: 1px;
 }
@@ -48,4 +48,28 @@
 
 .list-item:hover {
     opacity: 1;
+}
+
+
+/* TODOLIST */
+
+#tasks-list > a > input {
+    float: left;
+    margin-top: 18px;
+}
+
+#tasks-list > .list-group-item:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+
+.task-content {
+    margin-left: 50px;
+}
+
+.button-delete-task {
+    float: right;
 }

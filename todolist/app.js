@@ -50,6 +50,19 @@ app.get("/api/tasks", (req, res) => {
 
 });
 
+//GET tasks Title
+app.get("/api/taskslist",(req, res) => {
+    sql = "SELECT title FROM Tasks";
+    db.all(sql, (err, rows) => {
+        if(err) {
+            console.log(err);
+        }
+        else {
+            res.send(rows);
+        }
+    });
+});
+
 
 // GET SOME TASK
 app.get("/api/task/:id", (req, res) => {
