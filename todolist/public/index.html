@@ -21,50 +21,25 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="wrapper">
-                    <!-- <div class="control-panel">
-                        <input class="addItem" type="text"><input type="button" id="add" value="add">
-            
-                    </div> -->
-            
-            
-            
-            
-                    <!-- <div class="todolist">
-                        <form name="userForm">
-                            <input type="hidden" name="id" value="0" />
-                            <div class="form-group">
-                                <label for="name">Имя:</label>
-                                <input class="form-control" name="name" />
-                            </div>
-                            <div class="form-group">
-                                <label for="age">Возраст:</label>
-                                <input class="form-control" name="age" />
-                            </div>
-                            <div class="panel-body">
-                                <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
-                                <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
-                            </div>
-                        </form> -->
-            
-            
-                        <form name="todolist">
-                            <label for="title">Title</label>
-                            <input name="title">
-                            <label for="content">Content</label>
-                            <input name="content">
-                            <button type="submit">Create</button>
-                            <div>
-                                <label for="deleteTask">Delete User by id</label>
-                                <input name="deleteTask">
-                                <button id="deletetask" type="button">Delete</button><span id = "sp"></span>
-                            </div>
-                        </form>
-            
-            
-                        <button type="button" id="get-tasks-list">Get Tasks List</button>
-                        <div id="tasks-list">
-            
+                    
+                    <form name="todolist">
+                        <label for="title">Title</label>
+                        <input name="title">
+                        <label for="content">Content</label>
+                        <input name="content">
+                        <button type="submit">Create</button>
+                        <div>
+                            <label for="deleteTask">Delete User by id</label>
+                            <input name="deleteTask">
+                            <button id="deletetask" type="button">Delete</button><span id = "sp"></span>
                         </div>
+                    </form>
+        
+        
+                    <button type="button" id="get-tasks-list">Get Tasks List</button>
+                    <div id="tasks-list">
+        
+                    </div>
             
                         
             
@@ -117,7 +92,6 @@
         }
 
         async function DeleteTask(id) {
-
             const response = await fetch("http://localhost:3000/api/task", {
                 method: "DELETE",
                 headers: { "Accept": "application/json", "Content-Type": "application/json" },
@@ -178,7 +152,8 @@
             return result;
         }
 
-        GetTasksListTitle()
+        // work, but OFF
+        //GetTasksListTitle()
 
         document.forms["todolist"].addEventListener("submit", e => {
             e.preventDefault();
@@ -229,8 +204,8 @@
 
             buttonsDeleteTask.forEach(function (elem) {
                 elem.addEventListener("click", function(e){
-                    console.log(this.parentElement.id);
-                    DeleteTask(this.parentNode.id.slice(5))
+                    console.log(this.closest("a.todo-list-task").id);
+                    DeleteTask(this.closest("a.todo-list-task").id.slice(5));
                 });
             })
         }
@@ -247,21 +222,76 @@
                     <input class="right form-check-input me-1" type="checkbox" value="" aria-label="...">
                     <div class="task-content">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="todo-list-task mb-1">${title}</h5>
+                            <h5 class="task-title todo-list-task mb-1">${title}</h5>
                             <small>3 days ago</small>
                         </div>
                         <p class="mb-1">${content}</p>
                         
                     </div>
                     <button class="button-delete-task">Delete task</button>
+                    <button class="button-edit-task">Edit task</button>
                 </a>
                 `;
             }
 
             document.querySelector("#tasks-list").innerHTML = out;
             DeleteTaskButton();
+            EditTaskButton(list);
+        }
 
+        function EditTaskButton(list) {
+            let buttonEdit = document.querySelectorAll(".button-edit-task");
+            buttonEdit.forEach(function(button){
+                button.addEventListener("click", function(){
+                    //console.log(button.closest("a.todo-list-task").id);
+                    //console.log(this.closest(".todo-list-task").id.slice(5));
+                    
+                    //let item = list.find( item => item.id === idd).id;
+                    let task = this.closest(".todo-list-task");
+                    let taskTitle = task.querySelector("h5").innerHTML;
+                    let taskID = this.closest(".todo-list-task").id.slice(5);
+                    let taskContent = task.querySelector("p.mb-1").innerText;
+                    let editWindow = `
+                        <input type="text" value="${taskTitle}">
+                        <textarea name="content" id="" cols="30" rows="10">${taskContent}</textarea>
+                        <button class="editSave">Save</button>
+                        <button class="editCancel">Cancel</button>
+                    `
+                    document.querySelector(".edit-window").innerHTML = editWindow;
 
+                    document.querySelector(".editSave").addEventListener("click", function(e) {
+                        let title = document.querySelector(".edit-window > input").value;
+                        let content = document.querySelector(".edit-window > textarea").value;
+                        let log = list.find(element => element.id = taskID);
+                        console.log(content);
+                        let obj = {
+                            id: taskID,
+                            title: title,
+                            content: content }
+                        //EditTask( { id:taskID,title:taskTitle,content:taskContent } );
+                        console.log(obj);
+                        EditTask(obj);
+                    })
+                })
+            })
+        }
+
+        async function EditTask(task){
+            const response = await fetch("http://localhost:3000/api/task", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json"},
+                body: JSON.stringify({
+                    id: task.id,
+                    title: task.title,
+                    content: task.content
+                })
+            })
+            if(response.status === true){
+                result = await response.json();
+                console.log(result);
+            }
+
+            GetTaskList();
         }
 
 
@@ -273,7 +303,12 @@
 
 </script>
 
-
+<div class="edit-window">
+    <input type="text">
+    <textarea name="content" id="" cols="30" rows="10"></textarea>
+    <button class="editSave">Save</button>
+    <button class="editCancel">Cancel</button>
+</div>
 
 
 

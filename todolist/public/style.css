@@ -70,6 +70,18 @@
     margin-left: 50px;
 }
 
-.button-delete-task {
+.button-delete-task, .button-edit-task {
     float: right;
+    margin-left: 10px;
+}
+
+.edit-window {
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.edit-window > input, .edit-window > textarea {
+    display: block;
+    width: 100%;
 }

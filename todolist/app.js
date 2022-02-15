@@ -134,6 +134,26 @@ app.delete("/api/task",jsonParser, function (req, res){
 //     })
 // });
 
+app.put("/api/task", jsonParser, function (req, res){
+    let id = req.body.id;
+    let title = req.body.title;
+    let content = req.body.content;
+    sql = `UPDATE Tasks SET title = "${title}", content = "${content}" WHERE id = ${id}`;
+    res.send(sql);
+    db.run(sql, function (err){
+        if(err){
+            console.log(err.message);
+        }
+        else {
+            console.log(sql);
+            res.send();
+        }
+    })
+
+});
+
+
+
 
 
 app.listen(port, () => {
