@@ -52,7 +52,7 @@ app.get("/api/tasks", (req, res) => {
 
 //GET tasks Title
 app.get("/api/taskslist",(req, res) => {
-    sql = "SELECT title FROM Tasks";
+    sql = "SELECT id,title FROM Tasks";
     db.all(sql, (err, rows) => {
         if(err) {
             console.log(err);

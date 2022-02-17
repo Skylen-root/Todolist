@@ -89,6 +89,7 @@
             //     document.querySelector("tbody").append(row(user));
             // }
             GetTaskList();
+            document.querySelector("input").focus();
         }
 
         async function DeleteTask(id) {
@@ -268,9 +269,9 @@
                             id: taskID,
                             title: title,
                             content: content }
-                        //EditTask( { id:taskID,title:taskTitle,content:taskContent } );
+                        EditTask( { id:taskID,title:title,content:content } );
                         console.log(obj);
-                        EditTask(obj);
+                        //EditTask(obj);
                     })
                 })
             })
